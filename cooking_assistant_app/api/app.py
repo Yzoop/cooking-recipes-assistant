@@ -23,7 +23,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
         raise HTTPException(status_code=401, detail="Invalid or missing authentication token")
 
 
-@app.get("/")
+@app.get("/", dependencies=[Depends(verify_token)])
 def home():
     return {"message": "Welcome to the Recipe Parsing API!"}
 
