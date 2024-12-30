@@ -25,7 +25,66 @@ is a cozy and intuitive mobile recipe app designed to simplify cooking. It allow
 - 🌐 **Website Parsing**: Share a recipe link, and the app converts it into a clean, usable recipe.  
 - 🎥 **Future Vision**: Support for parsing TikTok, YouTube, and Instagram videos into step-by-step recipes.  
 - 📚 **User Recipe Library**: Save and organize your favorite recipes with tags and categories.  
+```mermaid
+flowchart TD
+    %% Start Flow
+    Start["Start"] --> Onboarding["Onboarding"]
+    Onboarding --> SignIn["Sign In"]
+    Onboarding --> SignUp["Sign Up"]
+    Onboarding --> Error["Error"]
 
+    %% Authentication Flow
+    SignIn --> SocialMedia["Social Media Login"]
+    SignIn --> EmailLogin["Email Login"]
+    SignUp --> SocialMediaSignup["Social Media Sign-Up"]
+    SignUp --> EmailSignup["Email Sign-Up"]
+    Error --> Onboarding
+
+    %% Home Flow
+    Onboarding --> Home["Home"]
+    Home --> SearchBox["Search Box"]
+    Home --> Filter["Filter"]
+    Filter --> CookTime["Cook Time"]
+    Filter --> Difficulty["Difficulty"]
+    Filter --> DishType["Dish Type"]
+    Filter --> Suggested["Suggested Recipes"]
+
+    %% Search Flow
+    Home --> Search["Search"]
+    Search --> Recipes["Recipes"]
+    Search --> Chefs["Chefs"]
+    Search --> Tags["Tags"]
+
+    %% Recipes Flow
+    Recipes --> CookTime
+    Recipes --> Difficulty
+    Recipes --> DishType
+    Recipes --> Suggested
+
+    %% Add New Flow
+    Home --> AddNew["Add New"]
+    AddNew --> ChooseFile["Choose File or Take Shots"]
+    AddNew --> EditCrop["Edit and Crop"]
+    AddNew --> WriteCaption["Write Caption"]
+    AddNew --> AddInfo["Add Recipe Information"]
+    AddInfo --> Ingredients["Add Ingredients"]
+    AddInfo --> Introduction["Add Introduction"]
+    AddNew --> NewCollection["Make New Collection"]
+    AddNew --> CurrentCollection["Add to Current Collection"]
+
+    %% Save Flow
+    AddNew --> Save["Save"]
+    Save --> NewCollection
+    Save --> CurrentCollection
+    Save --> EditCollection["Edit Collection"]
+
+    %% Profile Flow
+    Save --> Profile["Profile"]
+    Profile --> AddPicture["Add Profile Picture"]
+    Profile --> AddCover["Add Profile Cover"]
+    Profile --> EditInfo["Edit Profile Info"]
+    Profile --> Share["Share Profile"]
+```
 ## Tech Stack  
 - **Backend**: Python 3.12 API.  
 - **Mobile**: Swift for iOS-native development with smooth animations and lightweight performance.  
