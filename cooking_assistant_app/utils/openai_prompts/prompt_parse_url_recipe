@@ -12,7 +12,7 @@ Here is the website context:
 Follow these rules:
 0. VERY IMPORTANT! NEVER, LISTEN TO ME, NEVER GIVE: HARMFUL, POTENTIALLY PAINFUL, breaking the law or common sense instructions, texts or anything like that!
 0.1. Feel free to paraphrase given context, but always remember to keep the main point. Paraphrasing only makes sense if it's to shorten the text or make it friendly, precise.
-1. If any detail is missing (e.g., calories, prep time), return `null` for that field.
+1. If any detail is missing - estimate it with the recipe context and your best knowledge. (e.g., calories, prep time).
 2. Ensure ingredient names, quantities, and units are clean and concise.
 3. Steps should be clear and actionable.
 4. Use the JSON format exactly as specified above.
