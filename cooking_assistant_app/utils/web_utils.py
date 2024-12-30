@@ -1,10 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib3.util import url
+from pydantic import HttpUrl
 
 
-def get_website_context(website_url: url) -> str:
+def get_website_context(website_url: HttpUrl) -> str:
     # TODO: handle bot detection
+    # TODO: reduce content size for api input size sake
     response = requests.get(website_url)
     # TODO: add proper error handling
     response.raise_for_status()
