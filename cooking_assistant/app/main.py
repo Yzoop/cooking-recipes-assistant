@@ -5,7 +5,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import HttpUrl
 
-from cooking_assistant_app.utils.prompt_manager import OpenaiApiManager
+from cooking_assistant.utils.prompt_manager import OpenaiApiManager
 
 app = FastAPI()
 security = HTTPBearer()

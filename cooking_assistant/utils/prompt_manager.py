@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import HttpUrl
 
-from cooking_assistant_app.models.receipt import Recipe
-from cooking_assistant_app.utils.web_utils import get_website_context
+from cooking_assistant.models.receipt import Recipe
+from cooking_assistant.utils.web_utils import get_website_context
 
 # TODO: add feature: replace ingredient / what you have or recommended
 # TODO: add recommendations how to modify the receipt
