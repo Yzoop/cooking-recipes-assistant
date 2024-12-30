@@ -10,6 +10,8 @@ package-mode = false
 python = "^3.12"
 openai = "^1.58.1"
 instructor = "^1.7.2"
+python-dotenv = "^1.0.1"
+beautifulsoup4 = "^4.12.3"
 
 
 [tool.poetry.dev-dependencies]
