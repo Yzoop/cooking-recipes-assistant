@@ -12,7 +12,7 @@ WORKDIR /app
 RUN pip install --no-cache-dir poetry
 
 # Copy the project files to the container
-COPY poetry.lock pyproject.toml app/
+COPY poetry.lock pyproject.toml .env app/
 COPY . /app
 
 # Install dependencies using Poetry
