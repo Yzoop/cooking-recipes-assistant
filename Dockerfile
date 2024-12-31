@@ -19,4 +19,4 @@ COPY . /app
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
 # Command to run the app
-CMD ["uvicorn", "cooking_assistant.app.main:app", "--host", "0.0.0.0",  "--port", "${PORT}"]
+CMD ["uvicorn", "cooking_assistant.app.main:app", "--host", "0.0.0.0"]
