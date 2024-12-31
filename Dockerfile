@@ -18,8 +18,5 @@ COPY . /app
 # Install dependencies using Poetry
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
-# Expose the port for Heroku
-EXPOSE 5000
-
 # Command to run the app
-CMD ["uvicorn", "cooking_assistant.app.main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["uvicorn", "cooking_assistant.app.main:app", "--host", "0.0.0.0",  "--port", "$PORT"]
