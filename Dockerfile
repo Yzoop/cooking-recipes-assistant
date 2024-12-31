@@ -12,8 +12,8 @@ WORKDIR /app
 RUN pip install --no-cache-dir poetry
 
 # Copy the project files to the container
-COPY poetry.lock pyproject.toml /app/
-COPY . /app/
+COPY poetry.lock pyproject.toml app/
+COPY . /app
 
 # Install dependencies using Poetry
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
@@ -22,4 +22,4 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 EXPOSE 5000
 
 # Command to run the app
-CMD ["uvicorn", "cooking_assistant.app:main", "--host", "0.0.0.0", "--port", "5000", "--proxy-headers"]
+CMD ["uvicorn", "cooking_assistant.app.main:app", "--host", "0.0.0.0", "--port", "5000"]
