@@ -17,6 +17,8 @@ from cooking_assistant.utils.web_utils import (
 # TODO: add feature: replace ingredient / what you have or recommended
 # TODO: add recommendations how to modify the receipt
 # TODO: add tools what people have, like oven, air-fryer etc.
+# TODO: add counter on how many people the receipt is,
+#  adjust (add formula) the recipe to be multiplied for several people.
 
 
 class OpenaiApiManager:
