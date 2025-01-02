@@ -36,13 +36,14 @@ class Recipe(BaseModel):
     title: str = Field(..., description="Title of the recipe.")
     summary: str = Field(
         ...,
-        description="Description of the receipt, what it is about,"
+        description="Description of the dish and receipt, what it is about,"
         " what food etc. "
-        "One sentence - 10-15 words at max.",
-        max_length=50,
+        "One sentence - 20 words at max.",
+        max_length=70,
     )
     ingredients: list[Ingredient] = Field(..., description="List of ingredients.")
     # TODO: add pictures to the steps, make the more structured
     steps: List[str] = Field(..., description="Step-by-step instructions.")
     dish_info: DishInfo = Field(..., description="Additional information about the dish.")
     tags: List[str] = Field(..., description="Tags for categorizing the recipe.")
+    photo_base64: str | None = Field(None, description="Ignore it!!!")
