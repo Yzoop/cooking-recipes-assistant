@@ -140,6 +140,11 @@ RecipeEase is an open-source project! Contributions, feature suggestions, and fe
 }
 ```
 
+## Heroku helpers
+`git push heroku main` - deploy from local 
+
+`heroku logs --tail -a cooking-assistant-api` - check the app logs
+
 ## License
 This project is licensed under the Educational Community License v2.0 (ECL-2.0).  
 **Note:** This code is provided strictly for educational purposes. Any commercial use is strongly discouraged.
