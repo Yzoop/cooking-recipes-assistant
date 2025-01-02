@@ -31,7 +31,7 @@ def home():
 @app.get("/parse-recipe/", dependencies=[Depends(verify_token)])
 def parse_recipe(website_url: HttpUrl):
     try:
-        recipe = api_manager.get_recipe(website_url=website_url)
+        recipe = api_manager.get_recipe(recipe_url=website_url)
         return recipe.dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

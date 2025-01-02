@@ -13,6 +13,8 @@ instructor = "^1.7.2"
 python-dotenv = "^1.0.1"
 beautifulsoup4 = "^4.12.3"
 fastapi = {version = "^0.115.6", extras = ["all"]}
+pyktok = "^0.0.30"
+moviepy = "^2.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^24.10.0"

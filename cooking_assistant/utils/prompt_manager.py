@@ -7,7 +7,12 @@ from openai import OpenAI
 from pydantic import HttpUrl
 
 from cooking_assistant.models.receipt import Recipe
-from cooking_assistant.utils.web_utils import get_website_context
+from cooking_assistant.utils.web_utils import (
+    TikTokManager,
+    UrlType,
+    get_website_context,
+    type_of_url,
+)
 
 # TODO: add feature: replace ingredient / what you have or recommended
 # TODO: add recommendations how to modify the receipt
@@ -32,17 +37,25 @@ class OpenaiApiManager:
         self.__openai_client = instructor.from_openai(
             OpenAI(api_key=os.getenv(openai_api_key_name))
         )
+        self.tiktok_manager = TikTokManager()
 
-    def get_recipe(self, website_url: HttpUrl, gpt_model: str = "gpt-4o-mini") -> Recipe:
+    def get_recipe(self, recipe_url: HttpUrl, gpt_model: str = "gpt-4o-mini") -> Recipe:
         # Extract structured data from natural language
-        processed_prompt = self.__process_prompt(website_url)
+        processed_prompt = self.__process_prompt(recipe_url)
         recipe = self.__openai_client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=gpt_model,
             response_model=Recipe,
             messages=[{"role": "user", "content": processed_prompt}],
         )
         return recipe
 
-    def __process_prompt(self, website_url: HttpUrl):
-        page_content = get_website_context(website_url)
-        return self.__prompt.format(website_context=page_content)
+    def __process_prompt(self, recipe_url: HttpUrl):
+        if (url_type := type_of_url(recipe_url)) == UrlType.tiktok_url:
+            content = self.tiktok_manager.get_tiktok_captions(tt_video_url=recipe_url)
+        elif url_type == UrlType.web_page_url:
+            content = get_website_context(recipe_url)
+        else:
+            raise NotImplementedError(f"The URL type for {recipe_url} is not implemented.")
+        # TODO: add content filter, i.e. vulnurable,
+        #  not related to cooking, not enough information etc.
+        return self.__prompt.format(website_context=content)
