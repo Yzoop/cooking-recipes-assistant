@@ -40,7 +40,7 @@ def type_of_url(url: HttpUrl) -> UrlType:
     :return: UrlType.web_page_url for regular webpages, UrlType.tiktok_url for TikTok URLs.
     :raises NotImplementedError: If the URL type is not implemented.
     """
-    if "tiktok.com" in url:
+    if "tiktok.com" in str(url):
         return UrlType.tiktok_url
     elif re.match(r"https?://", str(url)):
         return UrlType.web_page_url
@@ -77,7 +77,9 @@ class TikTokManager:
         temp_dir = tempfile.TemporaryDirectory()
         try:
             print(f"Downloading the given tiktok video: {tt_video_url}")
-            tt_video_path = self.__download_video(tt_video_url, where_to_save=Path(temp_dir.name))
+            tt_video_path, tt_video_desc = self.__download_video(
+                tt_video_url, where_to_save=Path(temp_dir.name)
+            )
             print(f"Video downloaded at path: {tt_video_path}")
             print("Extracting audio...")
             audio_path = self.__extract_audio(
@@ -85,13 +87,14 @@ class TikTokManager:
             )
             print(f"Extracted audio from the video: {tt_video_path}; saved to {audio_path}")
             captions = self.__get_captions_from_audio(audio_path)
+            captions_with_description = f"Description: {tt_video_desc}\n{captions}"
             # use temp_dir, and when done:
         except Exception as e:
             print(e)
             raise Exception(e)
         finally:
             temp_dir.cleanup()
-        return captions
+        return captions_with_description
 
     def __get_captions_from_audio(self, audio_path: Path):
         with open(audio_path, "rb") as audio_file:
@@ -137,10 +140,12 @@ class TikTokManager:
             return
         return tt_json
 
-    def __download_video(self, tt_video_url: HttpUrl, where_to_save: Path, browser_name=None):
+    def __download_video(
+        self, tt_video_url: HttpUrl, where_to_save: Path, browser_name=None
+    ) -> (Path, str):
         """
         Download video locally, saves as a temorary file
-        :return: path to the video, downloaded from given url
+        :return: path to the video, downloaded from given url. Video description as str
         """
         video_fn = where_to_save / Path("tt_video.mp4")
 
@@ -148,6 +153,9 @@ class TikTokManager:
         tt_video_url = tt_json["__DEFAULT_SCOPE__"]["webapp.video-detail"]["itemInfo"][
             "itemStruct"
         ]["video"]["playAddr"]
+        tt_video_description = tt_json["__DEFAULT_SCOPE__"]["webapp.video-detail"]["itemInfo"][
+            "itemStruct"
+        ]["desc"]
         if tt_video_url == "":
             tt_video_url = tt_json["__DEFAULT_SCOPE__"]["webapp.video-detail"]["itemInfo"][
                 "itemStruct"
@@ -161,4 +169,4 @@ class TikTokManager:
         )
         with open(video_fn, "wb") as fn:
             fn.write(tt_video.content)
-        return video_fn
+        return video_fn, tt_video_description
