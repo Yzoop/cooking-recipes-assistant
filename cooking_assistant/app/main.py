@@ -39,3 +39,14 @@ def parse_recipe(
         return recipe.dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/get-picture/", dependencies=[Depends(verify_token)])
+def get_picture(
+    summary: str = Query(..., description="Summary of the receipt."),
+):
+    try:
+        photo_bas64 = api_manager.generate_recipe_image(recipe_summary=summary)
+        return {"photo_bas64": photo_bas64}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

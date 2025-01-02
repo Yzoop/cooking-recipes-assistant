@@ -64,10 +64,10 @@ class OpenaiApiManager:
         )
         if generate_photo:
             print("Generating photo for the receipt!")
-            recipe.photo_base64 = self.__generate_recipe_image(recipe_summary=recipe.summary)
+            recipe.photo_base64 = self.generate_recipe_image(recipe_summary=recipe.summary)
         return recipe
 
-    def __generate_recipe_image(self, recipe_summary, gpt_model: str = "dall-e-3") -> str:
+    def generate_recipe_image(self, recipe_summary, gpt_model: str = "dall-e-3") -> str:
         """
         Generate a recipe image, convert it to Base64, and return the encoded string.
 
