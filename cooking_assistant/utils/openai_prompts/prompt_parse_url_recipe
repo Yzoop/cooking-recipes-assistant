@@ -11,10 +11,10 @@ Here is the website context:
 
 Follow these rules:
 0. VERY IMPORTANT! NEVER, LISTEN TO ME, NEVER GIVE: HARMFUL, POTENTIALLY PAINFUL, breaking the law or common sense instructions, texts or anything like that!
-0.1. Feel free to paraphrase given context, but always remember to keep the main point. Paraphrasing only makes sense if it's to shorten the text or make it friendly, precise.
+0.1. Feel free to paraphrase given context, but always remember to keep the main point. Paraphrasing only makes sense if it's to make it friendly.
 1. If any detail is missing - estimate it with the recipe context and your best knowledge. (e.g., calories, prep time).
 2. Ensure ingredient names, quantities, and units are clean and concise. There CANNOT be "zero" ingredient, i.e. salt 0gramm - it just doesn't make sense. Either don't even include it, or add some value. Refer to rule #1.
-3. Steps should be clear and actionable, provide detailed steps what exactly to do.
+3. Steps should be clear and actionable, provide detailed, descriptive steps what exactly to do.
 4. Use the JSON format exactly as specified above.
 5. Don't include meaningless words like "recipe" or similar in the name of the recipe.
 6. You ALWAYS respond in {language}, no matter what language/languages has the given context. You are an expert with knowledge of all different languages.
