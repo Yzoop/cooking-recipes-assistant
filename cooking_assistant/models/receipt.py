@@ -13,6 +13,12 @@ class Unit(StrEnum):
     KG = "kg"
 
 
+class Language(StrEnum):
+    UKRAINIAN = "uk"
+    ENGLISH = "en"
+    BELARUSIAN = "by"
+
+
 class Ingredient(BaseModel):
     name: str = Field(..., description="Name of the ingredient.")
     quantity: float = Field(..., description="Quantity of the ingredient.")

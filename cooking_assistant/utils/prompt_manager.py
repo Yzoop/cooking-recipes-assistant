@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import HttpUrl
 
-from cooking_assistant.models.receipt import Recipe
+from cooking_assistant.models.receipt import Language, Recipe
 from cooking_assistant.utils.web_utils import (
     TikTokManager,
     UrlType,
@@ -41,9 +41,14 @@ class OpenaiApiManager:
         )
         self.tiktok_manager = TikTokManager()
 
-    def get_recipe(self, recipe_url: HttpUrl, gpt_model: str = "gpt-4o-mini") -> Recipe:
+    def get_recipe(
+        self,
+        recipe_url: HttpUrl,
+        gpt_model: str = "gpt-4o-mini",
+        language: Language = Language.ENGLISH,
+    ) -> Recipe:
         # Extract structured data from natural language
-        processed_prompt = self.__process_prompt(recipe_url)
+        processed_prompt = self.__process_prompt(recipe_url, language=language)
         recipe = self.__openai_client.chat.completions.create(
             model=gpt_model,
             response_model=Recipe,
@@ -51,7 +56,7 @@ class OpenaiApiManager:
         )
         return recipe
 
-    def __process_prompt(self, recipe_url: HttpUrl):
+    def __process_prompt(self, recipe_url: HttpUrl, language: Language):
         if (url_type := type_of_url(recipe_url)) == UrlType.tiktok_url:
             content = self.tiktok_manager.get_tiktok_captions(tt_video_url=recipe_url)
         elif url_type == UrlType.web_page_url:
@@ -60,4 +65,4 @@ class OpenaiApiManager:
             raise NotImplementedError(f"The URL type for {recipe_url} is not implemented.")
         # TODO: add content filter, i.e. vulnurable,
         #  not related to cooking, not enough information etc.
-        return self.__prompt.format(website_context=content)
+        return self.__prompt.format(website_context=content, language=language.name)
