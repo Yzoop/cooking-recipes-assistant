@@ -35,7 +35,9 @@ def parse_recipe(
     language: Language = Query(Language.ENGLISH, description="The language of the recipe content."),
 ):
     try:
-        recipe = api_manager.get_recipe(recipe_url=website_url, language=language)
+        recipe = api_manager.get_recipe(
+            recipe_url=website_url, language=language, generate_photo=False
+        )
         return recipe.dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
