@@ -65,10 +65,11 @@ class _Title(BaseModel):
 class _Summary(BaseModel):
     summary: str = Field(
         ...,
-        description="Description of the dish and receipt, what it is about,"
-        " what food etc. "
-        "One sentence - 10-15 words at max.",
-        max_length=100,
+        description="A concise, vivid description of the dish,"
+        "focusing on its key ingredients, presentation, and cooking style. "
+        "Include sensory or visual cues to make it vivid but keep it within 15-20 words "
+        "(120 characters max).",
+        max_length=120,
     )
 
 

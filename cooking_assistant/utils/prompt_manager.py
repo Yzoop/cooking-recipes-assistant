@@ -152,10 +152,10 @@ class OpenaiApiManager:
         # Generate image using OpenAI API
 
         return await self.__openai_client.images.generate(
-            model="dall-e-3",
+            model="dall-e-2",
             prompt=processed_prompt,
             # TODO: smaller size!
-            size="1024x1024",
+            size="512x512",
             quality="standard",
             n=1,
         )
