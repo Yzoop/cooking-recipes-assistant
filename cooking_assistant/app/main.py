@@ -36,7 +36,7 @@ async def parse_recipe(
 ):
     try:
         recipe = api_manager.get_recipe(
-            recipe_url=website_url, language=language, generate_image=False
+            recipe_url=website_url, language=language, generate_image=True
         )
         return (await recipe).dict()
     except Exception as e:
