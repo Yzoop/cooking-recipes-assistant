@@ -130,14 +130,7 @@ class TikTokManager:
         TikTokManager.cookies = tt.cookies
         soup = BeautifulSoup(tt.text, "html.parser")
         tt_script = soup.find("script", attrs={"id": "__UNIVERSAL_DATA_FOR_REHYDRATION__"})
-        try:
-            tt_json = json.loads(tt_script.string)
-        except AttributeError:
-            print(
-                "The function encountered a downstream error and did not deliver any data, "
-                "which happens periodically for various reasons. Please try again later."
-            )
-            return
+        tt_json = json.loads(tt_script.string)
         return tt_json
 
     def __download_video(

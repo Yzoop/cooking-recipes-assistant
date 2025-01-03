@@ -1,16 +1,24 @@
 import base64
-import io
 import os
 from pathlib import Path
 
+import aiohttp
 import instructor
 import requests
 from dotenv import load_dotenv
-from openai import OpenAI
-from PIL import Image
+from openai import AsyncOpenAI
 from pydantic import HttpUrl
 
-from cooking_assistant.models.receipt import Language, Recipe
+from cooking_assistant.models.receipt import (
+    DishInfo,
+    Language,
+    Recipe,
+    _Ingredients,
+    _Steps,
+    _Summary,
+    _Tags,
+    _Title,
+)
 from cooking_assistant.utils.web_utils import (
     TikTokManager,
     UrlType,
@@ -35,9 +43,7 @@ class OpenaiApiManager:
         if "{website_context}" not in self.__recipe_prompt:
             raise ValueError("Given prompt does not contain placeholder for the website url!")
         load_dotenv()
-        self.__openai_client = instructor.from_openai(
-            OpenAI(api_key=os.getenv(openai_api_key_name))
-        )
+        self.__openai_client = instructor.patch(AsyncOpenAI(api_key=os.getenv(openai_api_key_name)))
         self.tiktok_manager = TikTokManager()
 
     def __read_prompt(self, prompt_name: str) -> str:
@@ -47,68 +53,120 @@ class OpenaiApiManager:
         else:
             raise FileNotFoundError(f"Prompt {prompt_path} does not exist!")
 
-    def get_recipe(
+    async def get_recipe(
         self,
         recipe_url: HttpUrl,
         gpt_model: str = "gpt-4o-mini",
         language: Language = Language.ENGLISH,
-        generate_photo: bool = True,
+        generate_image: bool = False,
     ) -> Recipe:
-        # Extract structured data from natural language
-        processed_prompt = self.__process_prompt(recipe_url, language=language)
-        print("Fetching receipt!")
-        recipe = self.__openai_client.chat.completions.create(
-            model=gpt_model,
-            response_model=Recipe,
-            messages=[{"role": "user", "content": processed_prompt}],
+        # Preprocess the prompt once
+        processed_prompt = self.__process_prompt(recipe_url, language)
+
+        title = self.fetch_title(processed_prompt, gpt_model="gpt-3.5-turbo")
+        summary = self.fetch_summary(processed_prompt, gpt_model=gpt_model)
+        ingredients = self.fetch_ingredients(processed_prompt, gpt_model=gpt_model)
+        steps = self.fetch_steps(processed_prompt, gpt_model=gpt_model)
+        tags = self.fetch_tags(processed_prompt, gpt_model=gpt_model)
+        dish_info = self.fetch_dish_info(processed_prompt, gpt_model=gpt_model)
+
+        # Once summary is done, generate the image
+        summary = (await summary).summary
+        if generate_image:
+            image_url = self.fetch_recipe_image(
+                summary
+            )  # Pass the summary text to image generation
+        else:
+            image_url = None
+
+        # Create the Recipe object once all data is available
+        recipe = Recipe(
+            title=(await title).title,
+            source_url=recipe_url,
+            summary=summary,
+            ingredients=(await ingredients).ingredients,
+            steps=(await steps).steps,
+            tags=(await tags).tags,
+            dish_info=await dish_info,
+            photo_base64=self.__process_image(await image_url) if image_url else None,
         )
-        if generate_photo:
-            print("Generating photo for the receipt!")
-            recipe.photo_base64 = self.generate_recipe_image(recipe_summary=recipe.summary)
+
         return recipe
 
-    def generate_recipe_image(self, recipe_summary, gpt_model: str = "dall-e-3") -> str:
-        """
-        Generate a recipe image, convert it to Base64, and return the encoded string.
-
-        Args:
-            recipe_summary (str): Summary of the recipe to generate an image.
-            gpt_model (str): The image generation model to use.
-
-        Returns:
-            str: Base64-encoded string of the generated image.
-        """
-        processed_prompt = self.__photo_prompt.format(summary=recipe_summary)
-
-        # Generate image using OpenAI API
-        photo_url = (
-            self.__openai_client.images.generate(
-                model=gpt_model,
-                prompt=processed_prompt,
-                # TODO: smaller size!
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
-            .data[0]
-            .url
+    def __process_image(self, openai_image_response) -> str:
+        return base64.b64encode(requests.get(openai_image_response.data[0].url).content).decode(
+            "utf-8"
         )
 
-        # Fetch the image from the generated URL
-        response = requests.get(photo_url)
-        if response.status_code != 200:
-            raise ValueError(f"Failed to download the image from {photo_url}")
+    async def fetch_title(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_Title,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
 
-        # Convert the image content to Base64
-        image = Image.open(io.BytesIO(response.content))
-        resized_image = image.resize((512, 512))
+    async def fetch_summary(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_Summary,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
 
-        # Convert the resized image to Base64
-        buffer = io.BytesIO()
-        resized_image.save(buffer, format="PNG")
-        image_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    async def fetch_steps(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_Steps,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
 
-        return image_base64
+    async def fetch_dish_info(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=DishInfo,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
+
+    async def fetch_ingredients(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_Ingredients,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
+
+    async def fetch_tags(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_Tags,
+            messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=3,
+        )
+        return response
+
+    async def fetch_recipe_image(self, recipe_summary: str) -> str:
+        processed_prompt = self.__photo_prompt.format(summary=recipe_summary)
+        # Generate image using OpenAI API
+
+        return await self.__openai_client.images.generate(
+            model="dall-e-3",
+            prompt=processed_prompt,
+            # TODO: smaller size!
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+
+    async def download_image(self, image_url: str) -> str:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(image_url) as resp:
+                if resp.status == 200:
+                    image_data = await resp.read()
+                    return base64.b64encode(image_data).decode("utf-8")
+        return ""
 
     def __process_prompt(self, recipe_url: HttpUrl, language: Language):
         if (url_type := type_of_url(recipe_url)) == UrlType.tiktok_url:

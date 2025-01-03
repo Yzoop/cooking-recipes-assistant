@@ -1,21 +1,36 @@
+import asyncio
+import time
+
 from pydantic import HttpUrl
 
-from cooking_assistant.models.receipt import Language
 from cooking_assistant.utils.prompt_manager import OpenaiApiManager
 
-# from cooking_assistant.utils.web_utils import TikTokManager
-
 if __name__ == "__main__":
-    prompt_manager = OpenaiApiManager()
-    print(
-        prompt_manager.get_recipe(
-            recipe_url=HttpUrl("https://vm.tiktok.com/ZMkAKXcth/"), language=Language.UKRAINIAN
+    # summary = "Смачний лосось в аерогрилі за простим і швидким рецептом."
+    # prompt_manager = OpenaiApiManager()
+    # taken_times = {"dall-e-2": [], "dall-e-3": []}
+    # for model in taken_times.keys():
+    #     print(os.path.exists(f"generated_photos/{model}"))
+    #     for i in range(5):
+    #         start_time = time.time()
+    #         base_64 = prompt_manager.generate_recipe_image(
+    #             recipe_summary=summary, gpt_model=model, size="256x256"
+    #         )
+    #         taken_times[model].append(time.time() - start_time)
+    #
+    #         img = Image.open(io.BytesIO(base64.decodebytes(bytes(base_64, "utf-8"))))
+    #         img.save(f"generated_photos/{model}/{i}_dish.png")
+    # print(taken_times)
+
+    manager = OpenaiApiManager()
+    for _ in range(5):
+        start = time.time()
+        receipt = asyncio.run(
+            manager.get_recipe(
+                recipe_url=HttpUrl("https://vm.tiktok.com/ZMkAKXcth/"),
+                # generate_photo=False,
+                gpt_model="gpt-4o-mini",
+            )
         )
-    )
-    # tt_manager = TikTokManager()
-    # tt_manager.get_tiktok_captions(
-    #     tt_video_url=HttpUrl(
-    #         "https://www.tiktok.com/@martellifoods/video/7124401218184596742"
-    #         "?is_from_webapp=1&sender_device=pc&web_id=7383700479904171552"
-    #     )
-    # )
+        print(receipt)
+        print(time.time() - start)

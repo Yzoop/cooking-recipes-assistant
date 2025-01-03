@@ -30,25 +30,14 @@ def home():
 
 
 @app.get("/parse-recipe/", dependencies=[Depends(verify_token)])
-def parse_recipe(
+async def parse_recipe(
     website_url: HttpUrl = Query(..., description="The URL of the recipe to parse."),
     language: Language = Query(Language.ENGLISH, description="The language of the recipe content."),
 ):
     try:
         recipe = api_manager.get_recipe(
-            recipe_url=website_url, language=language, generate_photo=False
+            recipe_url=website_url, language=language, generate_image=True
         )
-        return recipe.dict()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-@app.get("/get-picture/", dependencies=[Depends(verify_token)])
-def get_picture(
-    summary: str = Query(..., description="Summary of the receipt."),
-):
-    try:
-        photo_bas64 = api_manager.generate_recipe_image(recipe_summary=summary)
-        return {"photo_bas64": photo_bas64}
+        return (await recipe).dict()
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
