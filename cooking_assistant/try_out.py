@@ -28,7 +28,7 @@ if __name__ == "__main__":
         receipt = asyncio.run(
             manager.get_recipe(
                 recipe_url=HttpUrl("https://vm.tiktok.com/ZMkAKXcth/"),
-                # generate_photo=False,
+                generate_image=True,
                 gpt_model="gpt-4o-mini",
             )
         )

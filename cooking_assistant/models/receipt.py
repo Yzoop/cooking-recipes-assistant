@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class Unit(StrEnum):
-    PIECE = "piece"
+    PIECES = "pieces"
     MILILITER = "ml"
     LITER = "l"
     MILIGRAMM = "mg"
@@ -67,9 +67,9 @@ class _Summary(BaseModel):
         ...,
         description="A concise, vivid description of the dish,"
         "focusing on its key ingredients, presentation, and cooking style. "
-        "Include sensory or visual cues to make it vivid but keep it within 15-20 words "
-        "(120 characters max).",
-        max_length=120,
+        "Include sensory or visual cues to make it vivid but keep it within 7-12 words "
+        "(80 characters maximum!!).",
+        max_length=80,
     )
 
 
