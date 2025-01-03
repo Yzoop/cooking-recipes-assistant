@@ -83,7 +83,7 @@ class OpenaiApiManager:
         print("Started extracting recipe parts...")
         title = self.fetch_title(processed_prompt, gpt_model="gpt-3.5-turbo")
         summary = self.fetch_summary(processed_prompt, gpt_model=gpt_model)
-        ingredients = self.fetch_ingredients(processed_prompt, gpt_model=gpt_model)
+        ingredients = self.fetch_ingredients(processed_prompt, gpt_model="gpt-4o")
         steps = self.fetch_steps(processed_prompt, gpt_model=gpt_model)
         # tags = self.fetch_tags(processed_prompt, gpt_model=gpt_model)
         dish_info = self.fetch_dish_info(processed_prompt, gpt_model=gpt_model)

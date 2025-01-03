@@ -27,10 +27,13 @@ if __name__ == "__main__":
         start = time.time()
         receipt = asyncio.run(
             manager.get_recipe(
-                recipe_url=HttpUrl("https://vm.tiktok.com/ZMkAKXcth/"),
+                recipe_url=HttpUrl(
+                    "https://www.tiktok.com/@tastelessbaker/video/7229542242506116353"
+                ),
                 generate_image=True,
                 gpt_model="gpt-4o-mini",
             )
         )
+        receipt
         print(receipt)
         print(time.time() - start)
