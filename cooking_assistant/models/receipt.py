@@ -16,6 +16,29 @@ class Unit(StrEnum):
     CLOVE = "clove"
 
 
+class DishClass(StrEnum):
+    SOUP = "Soup"
+    SALAD = "Salad"
+    PASTA = "Pasta"
+    PIZZA = "Pizza"
+    CURRY = "Curry"
+    BREAD = "Bread"
+    BURGER = "Burger"
+    SANDWICH = "Sandwich"
+    DESSERT = "Dessert"
+    DRINK = "Drink"
+    MEAT = "Meat"
+    FISH = "Fish"
+    RICE = "Rice"
+    NOODLES = "Noodles"
+    STEW = "Stew"
+    SNACK = "Snack"
+    EGG = "Egg"
+    CHEESE = "Cheese"
+    VEGAN = "Vegan"
+    FRUIT = "Fruit"
+
+
 class Language(StrEnum):
     UKRAINIAN = "uk"
     ENGLISH = "en"
@@ -36,6 +59,10 @@ class Ingredient(BaseModel):
 class DishInfo(BaseModel):
     calories: int = Field(..., description="Calories per serving.")
     cook_time: int = Field(..., description="All the cooking time in minutes.")
+
+
+class _DishClassPrediction(BaseModel):
+    dish_class: DishClass = Field(..., description="Predicted dish class from the recipe")
 
 
 class Recipe(BaseModel):

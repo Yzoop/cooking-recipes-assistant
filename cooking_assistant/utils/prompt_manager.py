@@ -10,9 +10,11 @@ from openai import AsyncOpenAI
 from pydantic import HttpUrl
 
 from cooking_assistant.models.receipt import (
+    DishClass,
     DishInfo,
     Language,
     Recipe,
+    _DishClassPrediction,
     _Ingredients,
     _Steps,
     _Summary,
@@ -40,6 +42,7 @@ class OpenaiApiManager:
     ):
         self.__recipe_prompt = self.__read_prompt("prompt_parse_url_recipe")
         self.__photo_prompt = self.__read_prompt("prompt_generate_dish_photo")
+        self.__dish_images = self.__get_dish_images()
         if "{website_context}" not in self.__recipe_prompt:
             raise ValueError("Given prompt does not contain placeholder for the website url!")
         load_dotenv()
@@ -52,6 +55,21 @@ class OpenaiApiManager:
                 return prompt_file.read()
         else:
             raise FileNotFoundError(f"Prompt {prompt_path} does not exist!")
+
+    def __get_dish_images(self) -> dict[str, str]:
+        """
+        Load all Base64-encoded images from the directory into memory.
+        """
+        dish_class_images: dict[str, str] = {}
+        for dish_class in DishClass:
+            filename = f"{dish_class.name.lower()}_image.txt"
+            filepath = os.path.join(Path(__file__).parent / "dish_images", filename)
+            if os.path.exists(filepath):
+                with open(filepath, "r") as file:
+                    dish_class_images[dish_class.name] = file.read()
+            else:
+                print(f"Warning: Missing image for class {dish_class.name}")
+        return dish_class_images
 
     async def get_recipe(
         self,
@@ -70,25 +88,19 @@ class OpenaiApiManager:
         # tags = self.fetch_tags(processed_prompt, gpt_model=gpt_model)
         dish_info = self.fetch_dish_info(processed_prompt, gpt_model=gpt_model)
 
-        # Once summary is done, generate the image
-        summary = (await summary).summary
-        if generate_image:
-            image_url = self.fetch_recipe_image(
-                summary
-            )  # Pass the summary text to image generation
-        else:
-            image_url = None
+        # Generate class for the receipt to get pre-generated image
+        dish_class = self.fetch_dish_class(processed_prompt, gpt_model=gpt_model)
 
         # Create the Recipe object once all data is available
         recipe = Recipe(
             title=(await title).title,
             source_url=recipe_url,
-            summary=summary,
+            summary=(await summary).summary,
             ingredients=(await ingredients).ingredients,
             steps=(await steps).steps,
             tags=[],  # (await tags).tags,
             dish_info=await dish_info,
-            photo_base64=self.__process_image(await image_url) if image_url else None,
+            photo_base64=self.__dish_images[(await dish_class).dish_class.name],
         )
 
         return recipe
@@ -126,6 +138,14 @@ class OpenaiApiManager:
         response = await self.__openai_client.chat.completions.create(
             model=gpt_model,
             response_model=DishInfo,
+            messages=[{"role": "user", "content": processed_prompt}],
+        )
+        return response
+
+    async def fetch_dish_class(self, processed_prompt: str, gpt_model: str) -> object:
+        response = await self.__openai_client.chat.completions.create(
+            model=gpt_model,
+            response_model=_DishClassPrediction,
             messages=[{"role": "user", "content": processed_prompt}],
         )
         return response

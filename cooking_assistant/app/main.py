@@ -16,7 +16,6 @@ api_manager = OpenaiApiManager()
 
 # Simulated token for demo purposes
 API_TOKEN = os.environ.get("ASSISTANT_API_KEY")
-print(API_TOKEN)
 
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
@@ -36,7 +35,7 @@ async def parse_recipe(
 ):
     try:
         recipe = api_manager.get_recipe(
-            recipe_url=website_url, language=language, generate_image=True
+            recipe_url=website_url, language=language, generate_image=False
         )
         return (await recipe).dict()
     except Exception as e:
