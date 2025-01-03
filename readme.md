@@ -1,118 +1,107 @@
-# Cooking recipes assistant - `Smachna` 
-## A few words about the project
+# Cooking Recipes Assistant - `Smachna`
+
+## A Few Words About the Project
+
 ### What?
-`Smachna` is a tool, that helps me save, organize, and simplify recipes. 
-From websites, TikTok, Instagram, and more, turning them into organized, clean, easy-to-follow steps.
-I decided to make `Smachna` for my own purpose to use personally. 
+`Smachna` is a tool designed to help save, organize, and simplify recipes. It turns recipes from websites, TikTok, Instagram, and other sources into clean, easy-to-follow formats.
 
 ### Why?
-Always I face issues, while having multiple sources of receipts, like
-- pinned websites with cool receipts, 
-- or saved tikok videos,
-- or instagram posts/videos
-- many more... 
+I often face issues managing recipes:
+- Websites clutter recipes with unrelated content.
+- TikTok and Instagram videos require pausing or screenshotting for ingredients.
+- Recipes are scattered across multiple platforms.
 
-And it's a headache to find out where I saved my receipts! 
+To solve these problems, I created `Smachna` as my personal assistant, now shared as a public API and app.
 
-Additionally, content makers make videos shorter, making me pause the video or screenshot ingridents.
-Or cooking websites have lots of content, completely or partially unrelated related to the core - receipt.
+---
 
-With all of these headaches I decided to make & **share** this API (app).
-is a cozy and intuitive mobile recipe app designed to simplify cooking. It allows users to search, save, and transform recipes into a clean, structured format. Powered by modern technologies like Python, Swift, and the latest LLM APIs, RecipeEase delivers a seamless experience for food enthusiasts.  
+## Features
 
-## Features  
-- 🥗 **Structured Recipes**: All recipes have a consistent format with ingredients, steps, and dish information (calories, cooking time, etc.).  
-- 🌐 **Website Parsing**: Share a recipe link, and the app converts it into a clean, usable recipe.  
-- 🎥 **Future Vision**: Support for parsing TikTok, YouTube, and Instagram videos into step-by-step recipes.  
-- 📚 **User Recipe Library**: Save and organize your favorite recipes with tags and categories.  
-```mermaid
-flowchart TD
-    %% Start Flow
-    Start["Start"] --> Onboarding["Onboarding"]
-    Onboarding --> SignIn["Sign In"]
-    Onboarding --> SignUp["Sign Up"]
-    Onboarding --> Error["Error"]
+### Current Features
+- 🥗 **Structured Recipes**  
+  All recipes follow a consistent format: ingredients, steps, and dish information (calories, cooking time, etc.).
+  
+- 🌐 **Website and Video Parsing**  
+  Parse recipes from websites, TikTok, and Instagram videos into a clean format.
+  
+- 🎨 **Custom Dish Images**  
+  Automatically generate minimalistic, cozy illustrations for each dish using AI.
 
-    %% Authentication Flow
-    SignIn --> SocialMedia["Social Media Login"]
-    SignIn --> EmailLogin["Email Login"]
-    SignUp --> SocialMediaSignup["Social Media Sign-Up"]
-    SignUp --> EmailSignup["Email Sign-Up"]
-    Error --> Onboarding
+- 📚 **Recipe Library**  
+  Save and organize your favorite recipes with tags and categories.
 
-    %% Home Flow
-    Onboarding --> Home["Home"]
-    Home --> SearchBox["Search Box"]
-    Home --> Filter["Filter"]
-    Filter --> CookTime["Cook Time"]
-    Filter --> Difficulty["Difficulty"]
-    Filter --> DishType["Dish Type"]
-    Filter --> Suggested["Suggested Recipes"]
+- 🔄 **Localization**  
+  Full support for multiple languages with localized units, text, and app labels.
 
-    %% Search Flow
-    Home --> Search["Search"]
-    Search --> Recipes["Recipes"]
-    Search --> Chefs["Chefs"]
-    Search --> Tags["Tags"]
+- 🖋️ **Clipboard Integration**  
+  Easily paste URLs or text directly from the clipboard into the app.
 
-    %% Recipes Flow
-    Recipes --> CookTime
-    Recipes --> Difficulty
-    Recipes --> DishType
-    Recipes --> Suggested
+- 🍽️ **Dish Classification**  
+  Recipes are grouped into predefined categories (e.g., Soup, Salad, Dessert), complete with auto-generated images for most popular dishes.
 
-    %% Add New Flow
-    Home --> AddNew["Add New"]
-    AddNew --> ChooseFile["Choose File or Take Shots"]
-    AddNew --> EditCrop["Edit and Crop"]
-    AddNew --> WriteCaption["Write Caption"]
-    AddNew --> AddInfo["Add Recipe Information"]
-    AddInfo --> Ingredients["Add Ingredients"]
-    AddInfo --> Introduction["Add Introduction"]
-    AddNew --> NewCollection["Make New Collection"]
-    AddNew --> CurrentCollection["Add to Current Collection"]
+- 🆕 **New Recipe Indicator**  
+  A "New!" badge appears in the app when a new recipe is added.
 
-    %% Save Flow
-    AddNew --> Save["Save"]
-    Save --> NewCollection
-    Save --> CurrentCollection
-    Save --> EditCollection["Edit Collection"]
+- 🔗 **Share to App**  
+  Seamlessly add recipes by sharing URLs directly from other apps like TikTok or Instagram.
 
-    %% Profile Flow
-    Save --> Profile["Profile"]
-    Profile --> AddPicture["Add Profile Picture"]
-    Profile --> AddCover["Add Profile Cover"]
-    Profile --> EditInfo["Edit Profile Info"]
-    Profile --> Share["Share Profile"]
-```
-## Tech Stack  
-- **Backend**: Python 3.12 API.  
-- **Mobile**: Swift for iOS-native development with smooth animations and lightweight performance.  
-- **Cloud**: Best practices in modern cloud architecture (to be shared as development progresses).  
+### Planned Features
+- 🔧 **Advanced TikTok/YouTube Parsing**  
+  Improved support for parsing videos into detailed recipes.
 
-## Roadmap  
-Project Plan Recap
-1. Design Recipe Structure ✅ 
-   - Completed with the Recipe Pydantic model.
-2. Simple First MVP of the Backend ✅ 
-   - A Python script (via prompt_manager) parses a website into the recipe structure.
-3. Add Feature to Extract content from TikTok Videos ⏳
-   - Not yet implemented. Requires investigation into TikTok’s API or other methods.
-4. Add User Recipe Database ⏳ 
-   - The current implementation doesn’t yet save parsed recipes. Database integration is needed.
-5. Script for Background Recipe Generation ⏳
-   - Not yet implemented. Will likely involve LLM calls or web scraping pipelines.
-6. Design Mobile App ❌
-   - Not started. No UI/UX design or mobile app setup yet.
-7. Develop Demo Mobile App ❌
-   - Not started. Requires backend completion and mobile framework selection.
-8. Adjust Mobile App (TBD) ❌
-   - Future step, pending mobile app completion.
+- 📊 **Analytics and Insights**  
+  Track cooking trends, ingredient popularity, and recipe usage.
 
-## Contribute  
-RecipeEase is an open-source project! Contributions, feature suggestions, and feedback are welcome.  
+- ☁️ **Cloud Sync**  
+  Sync recipes across multiple devices securely.
 
-## Recipe structure
+---
+
+## Change Log
+
+### Recent Updates
+1. **API Enhancements**  
+   - Unified `/parse-recipe/` endpoint for both recipes and images.  
+   - Optimized OpenAI requests for speed and cost efficiency.  
+
+2. **Mobile App Improvements**  
+   - Added "New!" badge with animation when new recipes are added.  
+   - Integrated share-to-app functionality for easier recipe importing.  
+   - Enhanced Recipe Detail View with better layouts, gradients, and dish info display.  
+
+3. **Dish Classification**  
+   - Auto-classify dishes into predefined categories.  
+   - Updated prompt for consistent image generation.  
+
+4. **Localization Updates**  
+   - Full multi-language support with localized units and UI components.  
+   - Added translations for ingredient units and other app text.  
+
+5. **File Persistence**  
+   - Recipes are now saved using `FileManager` to persist data across app sessions.  
+   - Duplicate recipes are avoided using `sourceUrl` as a unique identifier.
+
+---
+
+## Tech Stack
+
+- **Backend**: Python 3.12 API, OpenAI integration for LLM tasks.  
+- **Mobile**: Swift for iOS-native development.  
+- **Cloud**: Deployed on Heroku with best practices in cloud architecture.
+
+---
+
+## Roadmap
+
+1. **TikTok Parsing**: Enhanced content extraction from TikTok videos.  
+2. **Background Recipe Generation**: Support for automated scraping and recipe generation.  
+3. **User Recipe Database**: Database integration for managing and syncing user recipes.  
+4. **Mobile App**: Expand features like user profiles, search, and sharing.
+
+---
+
+## Recipe Structure
+
 ```json
 {
   "title": "Spaghetti Carbonara",
@@ -136,7 +125,10 @@ RecipeEase is an open-source project! Contributions, feature suggestions, and fe
     "prep_time": 10,
     "cook_time": 20
   },
-  "tags": ["Italian", "quick", "classic"]
+  "tags": ["Italian", "quick", "classic"],
+  "photo_base64": "data:image/png;base64,....",
+  "class": "Pasta",
+  "sourceUrl": "https://example.com/spaghetti-carbonara"
 }
 ```
 
