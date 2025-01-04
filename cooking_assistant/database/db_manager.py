@@ -34,7 +34,7 @@ class RecipeDbManager:
             )
             with open(path, "w+", encoding="utf-8") as credentials_json:
                 json.dump(credentials, credentials_json, indent=4, ensure_ascii=False)
-            return path
+        return path
 
     def get_recipe(self, language: Language, user_id: str, recipe_id: UUID) -> Recipe | None:
         """

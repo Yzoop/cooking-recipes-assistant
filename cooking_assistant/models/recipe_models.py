@@ -23,29 +23,6 @@ class Unit(StrEnum):
     CLOVE = "clove"
 
 
-class DishClass(StrEnum):
-    SOUP = "Soup"
-    SALAD = "Salad"
-    PASTA = "Pasta"
-    PIZZA = "Pizza"
-    CURRY = "Curry"
-    BREAD = "Bread"
-    BURGER = "Burger"
-    SANDWICH = "Sandwich"
-    DESSERT = "Dessert"
-    DRINK = "Drink"
-    MEAT = "Meat"
-    FISH = "Fish"
-    RICE = "Rice"
-    NOODLES = "Noodles"
-    STEW = "Stew"
-    SNACK = "Snack"
-    EGG = "Egg"
-    CHEESE = "Cheese"
-    VEGAN = "Vegan"
-    FRUIT = "Fruit"
-
-
 class Language(StrEnum):
     UKRAINIAN = "uk"
     ENGLISH = "en"
