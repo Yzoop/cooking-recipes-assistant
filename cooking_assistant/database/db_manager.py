@@ -18,9 +18,7 @@ class RecipeDbManager:
 
     def __get_credentials_path(self):
         path = Path(__file__).parent / "firebase-credentials.json"
-        if path.exists():
-            return path
-        else:
+        if not path.exists():
             credentials = dict(
                 type=os.environ["firebase_type"],
                 project_id=os.environ["firebase_project_id"],
@@ -36,6 +34,7 @@ class RecipeDbManager:
             )
             with open(path, "w+", encoding="utf-8") as credentials_json:
                 json.dump(credentials, credentials_json, indent=4, ensure_ascii=False)
+            return path
 
     def get_recipe(self, language: Language, user_id: str, recipe_id: UUID) -> Recipe | None:
         """
