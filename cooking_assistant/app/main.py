@@ -29,7 +29,7 @@ def home():
     return {"message": "Welcome to the Recipe Parsing API!"}
 
 
-@app.get("/send-recipe/", dependencies=[Depends(verify_token)])
+@app.put("/send-recipe/", dependencies=[Depends(verify_token)])
 async def send_recipe(
     user_id: str,
     recipe_url: HttpUrl,
