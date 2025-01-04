@@ -1,3 +1,4 @@
 .env
 .idea
 cooking_assistant/database/firebase-credentials.json
+add_firebase_creds_to_heroku.py

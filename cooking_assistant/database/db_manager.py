@@ -25,7 +25,7 @@ class RecipeDbManager:
                 type=os.environ["firebase_type"],
                 project_id=os.environ["firebase_project_id"],
                 private_key_id=os.environ["firebase_private_key_id"],
-                private_key=os.environ["firebase_private_key"],
+                private_key=os.environ["firebase_private_key"].replace("__NEW_LINE__", "\n"),
                 client_email=os.environ["firebase_client_email"],
                 client_id=os.environ["firebase_client_id"],
                 auth_uri=os.environ["firebase_auth_uri"],
