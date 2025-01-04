@@ -15,6 +15,7 @@ beautifulsoup4 = "^4.12.3"
 fastapi = {version = "^0.115.6", extras = ["all"]}
 pyktok = "^0.0.30"
 moviepy = "^2.1.1"
+firebase-admin = "^6.6.0"
 
 [tool.poetry.dev-dependencies]
 black = "^24.10.0"
