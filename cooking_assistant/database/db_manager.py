@@ -1,3 +1,5 @@
+import json
+import os.path
 from pathlib import Path
 from uuid import UUID
 
@@ -10,9 +12,30 @@ from cooking_assistant.models.recipe_models import Language, Recipe
 class RecipeDbManager:
     def __init__(self):
         # Initialize Firestore
-        cred = credentials.Certificate(Path(__file__).parent / "firebase-credentials.json")
+        cred = credentials.Certificate(self.__get_credentials_path())
         firebase_admin.initialize_app(cred)
         self.client = firestore.client()
+
+    def __get_credentials_path(self):
+        path = Path(__file__).parent / "firebase-credentials.json"
+        if path.exists():
+            return path
+        else:
+            credentials = dict(
+                type=os.environ["firebase_type"],
+                project_id=os.environ["firebase_project_id"],
+                private_key_id=os.environ["firebase_private_key_id"],
+                private_key=os.environ["firebase_private_key"],
+                client_email=os.environ["firebase_client_email"],
+                client_id=os.environ["firebase_client_id"],
+                auth_uri=os.environ["firebase_auth_uri"],
+                token_uri=os.environ["firebase_token_uri"],
+                auth_provider_x509_cert_url=os.environ["firebase_auth_provider_x509_cert_url"],
+                client_x509_cert_url=os.environ["firebase_client_x509_cert_url"],
+                universe_domain=os.environ["firebase_universe_domain"],
+            )
+            with open(path, "w+", encoding="utf-8") as credentials_json:
+                json.dump(credentials, credentials_json, indent=4, ensure_ascii=False)
 
     def get_recipe(self, language: Language, user_id: str, recipe_id: UUID) -> Recipe | None:
         """
