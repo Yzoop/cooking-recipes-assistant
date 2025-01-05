@@ -58,9 +58,9 @@ class RecipeGenerator:
         print("Started extracting recipe parts...")
 
         field_generators = {
-            "title": self.fetch_title(processed_prompt, "gpt-3.5-turbo"),
+            "title": self.fetch_title(processed_prompt, "gpt-4o-mini"),
             "summary": self.fetch_summary(processed_prompt, "gpt-4o-mini"),
-            "ingredients": self.fetch_ingredients(processed_prompt, "gpt-4o"),
+            "ingredients": self.fetch_ingredients(processed_prompt, "gpt-4o-mini"),
             "dish_info": self.fetch_dish_info(processed_prompt, "gpt-4o-mini"),
             "steps": self.fetch_steps(processed_prompt, "gpt-4o-mini"),
         }
@@ -125,6 +125,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_Ingredients,
             messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=4,
         )
         return response
 

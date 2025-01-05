@@ -21,6 +21,8 @@ class Unit(StrEnum):
     TEASPOON = "teaspoon"
     TABLESPOON = "tablespoon"
     CLOVE = "clove"
+    BUNCH = "bunch"
+    STICK = "stick"
 
 
 class Language(StrEnum):
