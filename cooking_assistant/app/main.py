@@ -68,3 +68,13 @@ async def get_recipe(
             raise HTTPException(status_code=404, detail="Recipe not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to retrieve recipe: {e}")
+
+
+@app.get("/my-recipes/", dependencies=[Depends(verify_token)])
+async def my_recipes(
+    user_id: str,
+) -> list[UUID]:
+    try:
+        return recipe_manager.get_recipe_ids(user_id=user_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve recipes for userId: {e}")

@@ -99,3 +99,18 @@ class RecipeDbManager:
         for doc in query:
             recipes_ref.document(doc.id).delete()
             print(f"Recipe with ID {recipe_id} has been deleted.")
+
+    def get_recipe_ids(self, user_id: str) -> list[UUID]:
+        recipes_ref = self.client.collection("users").document(user_id).collection("recipes")
+        docs = recipes_ref.list_documents()  # Use `list_documents` to get all document references
+
+        recipe_ids = []
+        for doc in docs:
+            try:
+                recipe_ids.append(UUID(doc.id))  # Document ID represents the recipe ID
+            except ValueError:
+                print(f"Document ID {doc.id} is not a valid UUID.")
+            except Exception as e:
+                print(f"Error processing document ID {doc.id}: {e}")
+
+        return recipe_ids

@@ -75,3 +75,7 @@ class RecipeManager:
             # Mark the recipe as failed in case of any error
             recipe.status = DbStatus.FAILED
             self.db_manager.update_recipe(language, user_id, recipe)
+
+    def get_recipe_ids(self, user_id: str) -> list[UUID]:
+        recipe_ids = self.db_manager.get_recipe_ids(user_id=user_id)
+        return recipe_ids
