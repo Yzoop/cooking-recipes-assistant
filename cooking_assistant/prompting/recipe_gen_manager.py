@@ -109,6 +109,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_Title,
             messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=5,
         )
         return response
 
@@ -117,6 +118,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_Summary,
             messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=5,
         )
         return response
 
@@ -125,7 +127,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_Ingredients,
             messages=[{"role": "user", "content": processed_prompt}],
-            max_retries=4,
+            max_retries=5,
         )
         return response
 
@@ -134,6 +136,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_Steps,
             messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=5,
         )
         return response
 
@@ -142,6 +145,7 @@ class RecipeGenerator:
             model=gpt_model,
             response_model=_DishInfo,
             messages=[{"role": "user", "content": processed_prompt}],
+            max_retries=5,
         )
         return response
 

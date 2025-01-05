@@ -1,3 +1,4 @@
+import datetime
 from enum import StrEnum
 from typing import List
 from uuid import UUID
@@ -59,6 +60,7 @@ class RecipeLanguageSensitiveInfo(BaseModel):
 class RecipeInfo(RecipeLanguageSensitiveInfo):
     # TODO: add pictures to the steps, make the more structured
     photo_base64: str | None = None
+    date_created_at: datetime.date
 
 
 class _PhotoBase64(BaseModel):

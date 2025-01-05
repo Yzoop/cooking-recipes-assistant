@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 from uuid import UUID
 
 from pydantic import HttpUrl
@@ -46,6 +47,7 @@ class RecipeManager:
             id=recipe_id,
             source_url=recipe_url,
             status=DbStatus.IN_PROGRESS,
+            date_created_at=datetime.datetime.today().date(),
         )
         self.db_manager.add_recipe(language, user_id, new_recipe)
 
